@@ -85,10 +85,10 @@ class SobelANPR:
     def locate_license_plate_candidates(self, gray, image, keep=5):
         rectKern = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 5))
         morphology = self.morphology_operation(gray, rectKern)
-        blackhat = morphology[0]
-        light = morphology[1]
+        morph = morphology[0]
+        luminance = morphology[1]
 
-        gradX = cv2.Sobel(blackhat, ddepth=cv2.CV_32F,
+        gradX = cv2.Sobel(morph, ddepth=cv2.CV_32F,
             dx=1, dy=0, ksize=-1)
         gradX = np.absolute(gradX)
         (minVal, maxVal) = (np.min(gradX), np.max(gradX))
@@ -106,7 +106,7 @@ class SobelANPR:
         thresh = cv2.dilate(thresh, None, iterations=2)
         self.debug_imshow("Grad Erode/Dilate", thresh)
 
-        thresh = cv2.bitwise_and(thresh, thresh, mask=light)
+        thresh = cv2.bitwise_and(thresh, thresh, mask=luminance)
         thresh = cv2.dilate(thresh, None, iterations=2)
         thresh = cv2.erode(thresh, None, iterations=1)
         self.debug_imshow("Masked", thresh)
@@ -174,10 +174,10 @@ class CannyANPR(SobelANPR):
     def locate_license_plate_candidates(self, gray, image, keep = 5):
         rectKern = cv2.getStructuringElement(cv2.MORPH_RECT, (13, 5))
         morphology = self.morphology_operation(gray, rectKern)
-        tophat = morphology[0]
-        dark = morphology[1]
+        morph = morphology[0]
+        luminance = morphology[1]
 
-        canny = cv2.Canny(tophat, 220, 225)
+        canny = cv2.Canny(morph, 350, 450)
         self.debug_imshow("Canny", canny)
 
         gaussian = cv2.GaussianBlur(canny, (5,5), 0)
@@ -190,11 +190,10 @@ class CannyANPR(SobelANPR):
         thresh = cv2.dilate(thresh, None, iterations=2)
         self.debug_imshow("Eroded & Dilated", thresh)
 
-        thresh = cv2.bitwise_and(thresh, thresh, mask=dark)
+        thresh = cv2.bitwise_and(thresh, thresh, mask=luminance)
         thresh = cv2.dilate(thresh, None, iterations=2)
         thresh = cv2.erode(thresh, None, iterations=1)
         self.debug_imshow("Masked", thresh)
-
 
         # self.debug_imshow("2nd Eroded & Dilated", thresh)
         # thresh = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, rectKern)
@@ -215,6 +214,8 @@ class CannyANPR(SobelANPR):
     def locate_license_plate(self, iteration, gray, candidates, clearBorder = False):
         lpCnt = None
         roi = None
+
+        # candidates = sorted(candidates, key=cv2.contourArea)
 
         for c in candidates:
             (x, y, w, h) = cv2.boundingRect(c)
@@ -267,6 +268,8 @@ class EdgelessANPR(SobelANPR):
     def locate_license_plate(self, iteration, gray, candidates, clearBorder = False):
         lpCnt = None
         roi = None
+
+        candidates = sorted(candidates, key=cv2.contourArea)
 
         for c in candidates:
             (x, y, w, h) = cv2.boundingRect(c)
