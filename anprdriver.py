@@ -21,7 +21,7 @@ ap.add_argument("-p", "--psm", type=int, default=7,
 ap.add_argument("-d", "--debug", type=int, default=-1,
 	help="whether or not to show additional visualizations")
 ap.add_argument("-a", "--algorithm", type=int, default=1,
-    help="choose an algorithm for image detection (1 - Adrian Rosebrock's algorithm, 2 - Modified Rosebrock's algorithm")
+    help="choose an edge detection method (1 - Sobel edge detection, 2 - Canny edge detection, 3 - Edge-less approach")
 ap.add_argument("-s", "--save", type=int, default = -1,
     help="whether to save or not the results in a folder")
 ap.add_argument("-m", "--morphology", type=int, default = 1,
