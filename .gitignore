@@ -3,3 +3,4 @@ result_sobel/
 result_edgeless/
 plates_combined/
 plates_source/
+__pycache__/
