@@ -40,7 +40,7 @@ algo = args["algorithm"]
 if algo == 1:
     anpr = SobelANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 elif algo == 2:
-    anpr = CannyANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0, )
+    anpr = CannyANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 elif algo == 3:
     anpr = EdgelessANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 else:
@@ -51,8 +51,12 @@ imagePaths = sorted(list(paths.list_images(args["input"])))
 for imagePath in imagePaths:
     iteration += 1
     start_time = time.time()
-    image = cv2.imread(imagePath)
-    image = imutils.resize(image, width=600)
+    originimage = cv2.imread(imagePath)
+    # cv2.imshow("Original", originimage)
+    image = imutils.resize(originimage, width=400, height=400)
+
+    image = cv2.bilateralFilter(image, 3, 105, 105)
+    cv2.imshow("Bilateral Filter", image)
 
     (lpText, lpCnt) = anpr.find_and_ocr(iteration, image, psm=args["psm"], clearBorder=args["clear_border"] > 0)
 
