@@ -5,7 +5,9 @@ import imutils
 import cv2
 import os
 
-pytesseract.pytesseract.tesseract_cmd = r'INSERT TESSERACT PATH' #Usually located at C:\Program Files\Tesseract-OCR\tesseract.exe
+#Path to Tesseract executable. Usually located at C:\Program Files\Tesseract-OCR\tesseract.exe for Windows.
+#This is only required if Tesseract executable is not defined in PATH, otherwise keep the line below commented.
+#pytesseract.pytesseract.tesseract_cmd = r'INSERT TESSERACT PATH' 
 
 class SobelANPR:
     def __init__(self, algo, morph, minAR=2.5, maxAR=5, debug=False, save=False):  
