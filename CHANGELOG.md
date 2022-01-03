@@ -7,7 +7,7 @@
 
 ## Changed
 
-- Absolute path for saving the final resulting images had been changed to relative path (#. Note that the `pytesseract.pytesseract.tesseract_cmd` still uses absolute path.
+- Absolute path for saving the final resulting images had been changed to relative path. Note that the `pytesseract.pytesseract.tesseract_cmd` still uses absolute path.
 
 ## Removed
 
