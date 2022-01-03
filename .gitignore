@@ -1,6 +1,2 @@
-result_canny/
-result_sobel/
-result_edgeless/
-plates_combined/
-plates_source/
+result_*/
 __pycache__/

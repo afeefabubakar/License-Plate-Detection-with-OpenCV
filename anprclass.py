@@ -10,12 +10,13 @@ import os
 pytesseract.pytesseract.tesseract_cmd = r'C:\\Users\\afeef\\Documents\\Development\\TesseractOCR\\tesseract.exe' #CHANGE THIS BEFORE COMMIT
 
 class SobelANPR:
-    def __init__(self, algo, morph, minAR=2.5, maxAR=5, debug=False, save=False):  
+    def __init__(self, algo, input_dir, morph, minAR=2.5, maxAR=5, debug=False, save=False):  
         self.minAR = minAR  #These two lines are to define the aspect ratio (AR) of the region of interest (ROI). Try experimenting with these values!
         self.maxAR = maxAR  #If the region of interest is within the boundary (minAR and maxAR) set here, it will be considered as a license plate
         self.debug = debug
         self.save = save
         self.algo = algo
+        self.input_dir = input_dir
         self.morph = morph
 
     def debug_imshow(self, title, image, waitKey=False):    #If debug argument (-d) is set to 1, the script will show the whole image processing pipeline
@@ -27,7 +28,8 @@ class SobelANPR:
     def save_result(self, name, image):                     #This function is used to save the final image which contains the ROI
         try:                                                #in a folder and also the image of the extracted ROI.
             result_dir = ['result_sobel', 'result_canny', 'result_edgeless']    
-            image_dir = r'.' + '\{}'.format(result_dir[self.algo-1])
+            image_dir = r'.' + '\{}'.format(result_dir[self.algo-1] + '_{}'.format(self.input_dir))
+            print(image_dir)
             os.chdir(image_dir)
         except:
             print("No folder directory found. Creating...")
@@ -162,7 +164,7 @@ class CannyANPR(SobelANPR):
         morph = morphology[0]
         luminance = morphology[1]
 
-        canny = cv2.Canny(morph, 200, 230) #originally 400,450
+        canny = cv2.Canny(morph, 200, 230) # Originally 400,450; try to experiment with these values.
         self.debug_imshow("Canny", canny, waitKey=True)
 
         gaussian = cv2.GaussianBlur(canny, (5,5), 0)
@@ -191,32 +193,6 @@ class CannyANPR(SobelANPR):
         self.debug_imshow("Masked", thresh, waitKey=True)
 
         return cnts
-
-    def locate_license_plate(self, iteration, gray, candidates, clearBorder = False):
-        lpCnt = None
-        roi = None
-
-        candidates = sorted(candidates, key=cv2.contourArea)
-
-        for c in candidates:
-            (x, y, w, h) = cv2.boundingRect(c)
-            ar = w / float(h)
-
-            if ar >= self.minAR and ar <= self.maxAR:
-                lpCnt = c
-                licensePlate = gray[y:y + h, x:x + w]
-                roi = cv2.threshold(licensePlate, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
-
-                if clearBorder:
-                    roi = clear_border(roi)
-
-                self.debug_imshow("License Plate", licensePlate)
-                self.debug_imshow("ROI", roi)
-
-                self.save_result('roi{}.png'.format(iteration), licensePlate)
-                break
-
-        return (roi, lpCnt)
 
 class EdgelessANPR(SobelANPR):
     def locate_license_plate_candidates(self, gray, image, keep = 5):
@@ -251,29 +227,3 @@ class EdgelessANPR(SobelANPR):
         self.debug_imshow("Masked", thresh, waitKey=True)
 
         return cnts
-
-    def locate_license_plate(self, iteration, gray, candidates, clearBorder = False):
-        lpCnt = None
-        roi = None
-
-        candidates = sorted(candidates, key=cv2.contourArea)
-
-        for c in candidates:
-            (x, y, w, h) = cv2.boundingRect(c)
-            ar = w / float(h)
-
-            if ar >= self.minAR and ar <= self.maxAR:
-                lpCnt = c
-                licensePlate = gray[y:y + h, x:x + w]
-                roi = cv2.threshold(licensePlate, 0, 255, cv2.THRESH_BINARY_INV | cv2.THRESH_OTSU)[1]
-
-                if clearBorder:
-                    roi = clear_border(roi)
-
-                self.debug_imshow("License Plate", licensePlate, waitKey=True)
-                self.debug_imshow("ROI", roi, waitKey=True)
-
-                self.save_result('roi{}.png'.format(iteration), licensePlate)
-                break
-
-        return (roi, lpCnt)

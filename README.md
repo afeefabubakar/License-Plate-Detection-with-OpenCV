@@ -25,3 +25,5 @@ The project code utilizes the following library:
    - `-s` (save) - whether to save the results or not (default is -1, *disable debug* and set to 1 to enable)
    - `-m` (morphology) - specify morphological operation (default is 1, 1 for black hat, 2 for top hat)
 3. The repository includes sample images of license plates in `malaysian` and `overseas` folder. Results are saved inside `result_canny`, `result_sobel`, and `result_edgeless` folders respectively.
+
+## README TO BE UPDATED FURTHER

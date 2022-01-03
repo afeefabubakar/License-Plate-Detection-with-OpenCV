@@ -4,6 +4,10 @@ import argparse
 import imutils
 import sys
 import cv2
+import os
+
+test = os.getcwd()
+print(test)
 
 def cleanup_text(text):
 	return "".join([c if ord(c) < 128 else "" for c in text]).strip()
@@ -27,24 +31,22 @@ args = vars(ap.parse_args())
 
 anpr = None
 iteration = 0
-positive = 0
-list_time = []
-list_positive_time = []
-avg_time = 0.0
-avg_positive_time = 0.0
+
+input_dir = args["input"]
+input_dir_name = input_dir.split('/')[-1]
 
 algo = args["algorithm"]
 if algo == 1:
-    anpr = SobelANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
+    anpr = SobelANPR(algo, input_dir_name, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 elif algo == 2:
-    anpr = CannyANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
+    anpr = CannyANPR(algo, input_dir_name, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 elif algo == 3:
-    anpr = EdgelessANPR(algo, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
+    anpr = EdgelessANPR(algo, input_dir_name, morph=args["morphology"], debug=args["debug"] > 0, save=args["save"] > 0)
 else:
     print('Invalid algorithm choice')
     sys.exit()
 
-imagePaths = sorted(list(paths.list_images(args["input"])))
+imagePaths = sorted(list(paths.list_images(input_dir)))
 for imagePath in imagePaths:
     iteration += 1
     originimage = cv2.imread(imagePath)
@@ -56,7 +58,6 @@ for imagePath in imagePaths:
     (lpText, lpCnt) = anpr.find_and_ocr(iteration, image, psm=args["psm"], clearBorder=args["clear_border"] > 0)
 
     if lpText is not None and lpCnt is not None:
-        positive += 1
         box = cv2.boxPoints(cv2.minAreaRect(lpCnt))
         box = box.astype("int")
         cv2.drawContours(image, [box], -1, (0, 255, 0), 2)
