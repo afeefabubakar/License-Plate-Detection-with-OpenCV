@@ -23,7 +23,10 @@ The project code utilizes the following library:
    - `-d` (debug) - should additional visualizations be shown (default is -1, set to 1 to enable)
    - `-a` (algorithm) - specify which algorithm to use (default is 1, 1 for Scharr, 2 for Canny, 3 for edge-less)
    - `-s` (save) - whether to save the results or not (default is -1, *disable debug* and set to 1 to enable)
-   - `-m` (morphology) - specify morphological operation (default is 1, 1 for black hat, 2 for top hat)
-3. The repository includes sample images of license plates in `malaysian` and `overseas` folder. Results are saved inside `result_canny`, `result_sobel`, and `result_edgeless` folders respectively.
+   - `-m` (morphology) - specify morphological operation (default is 1, 1 for black hat which is better for black text on white plates, 2 for top hat which is better for the opposite)
+3. The repository includes sample images of license plates in `malaysian` and `overseas` folder. Results are saved inside `result_canny_*`, `result_sobel_*`, and `result_edgeless_*` folders respectively where `*` is either `malaysian` or `overseas`.
+
+## Typical usage
+The script can be typically run by typing `python anprdriver.py -i /path/to/images/`. Path to the images can be written as `-i ./malaysian` for example. While only -i argument is necessary, be sure to choose the correct algorithm (-a) and morphological operation (-m) as needed.
 
 ## README TO BE UPDATED FURTHER
