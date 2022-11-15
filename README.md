@@ -28,5 +28,3 @@ The project code utilizes the following library:
 
 ## Typical usage
 The script can be typically run by typing `python anprdriver.py -i /path/to/images/`. Path to the images can be written as `-i ./malaysian` for example. While only -i argument is necessary, be sure to choose the correct algorithm (-a) and morphological operation (-m) as needed.
-
-## README TO BE UPDATED FURTHER
