@@ -22,7 +22,7 @@ The project code utilizes the following tools:
 ## How it works
 
 1. The project has 2 modules which is the driver and the class module named **anprdriver.py** and **anprclass.py** respectively. The driver module contains the script which the user should execute through Python while providing the arguments whereas the class module contains the three detection algorithm (Sobel, Canny, and edge-less) and other functions including saving results and workflow debug display.
-2. The driver should be executed in a terminal by using Python (`$ python anprdriver.py ...`). The arguments which could be appended are (arguments in bold are required):
+2. The driver should be executed in a terminal by using Python (`$ python3 anprdriver.py ...`). The arguments which could be appended are (arguments in bold are required):
    - **`-i` (input)** - path to input directory of images
    - `-c` (clear border) - should the script clear border pixels before performing OCR (default is -1, set to 1 to enable)
    - `-p` (PSM) - default tesseract page segmentation mode for license plate OCR (default is 7)
@@ -36,6 +36,6 @@ The project code utilizes the following tools:
 
 Build the Docker image `docker build -t anpr .` first then run in interactive mode `docker run -it anpr`.
 
-The script can then be typically run by typing `python3 anprdriver.py -i /path/to/images/` in the container terminal. Path to the images can be written as `-i /malaysian` for example. While only -i argument is necessary, be sure to choose the correct algorithm (-a) and morphological operation (-m) as needed.
+The script can then be typically run by typing `$ python3 anprdriver.py -i /path/to/images/` in the container terminal. Path to the images can be written as `-i /malaysian` for example. While only -i argument is necessary, be sure to choose the correct algorithm (-a) and morphological operation (-m) as needed.
 
 You can also include your own source image by modifying the Dockerfile.
