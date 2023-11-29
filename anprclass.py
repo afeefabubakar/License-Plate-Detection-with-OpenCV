@@ -7,7 +7,7 @@ import os
 
 #Path to Tesseract executable. Usually located at C:\Program Files\Tesseract-OCR\tesseract.exe for Windows.
 #This is only required if Tesseract executable is not defined in PATH, otherwise keep the line below commented.
-pytesseract.pytesseract.tesseract_cmd = r'C:\\Users\\afeef\\Documents\\Development\\TesseractOCR\\tesseract.exe' #CHANGE THIS BEFORE COMMIT
+# pytesseract.pytesseract.tesseract_cmd = r'/path/to/tesseract.exe' #CHANGE THIS BEFORE COMMIT
 
 class SobelANPR:
     def __init__(self, algo, input_dir, morph, minAR=2.5, maxAR=5, debug=False, save=False):  
@@ -28,7 +28,7 @@ class SobelANPR:
     def save_result(self, name, image):                     #This function is used to save the final image which contains the ROI
         try:                                                #in a folder and also the image of the extracted ROI.
             result_dir = ['result_sobel', 'result_canny', 'result_edgeless']    
-            image_dir = r'.' + '\{}'.format(result_dir[self.algo-1] + '_{}'.format(self.input_dir))
+            image_dir = r'.' + '/{}'.format(result_dir[self.algo-1] + '_{}'.format(self.input_dir))
             print(image_dir)
             os.chdir(image_dir)
         except:
